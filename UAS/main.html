@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Dark Login</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:Segoe UI, sans-serif;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(160deg,#022c22,#064e3b,#022c22);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* CARD */
+.box{
+  width:100%;
+  max-width:390px;
+  background:#021a14;
+  border-radius:20px;
+  padding:30px 26px;
+  box-shadow:0 30px 60px rgba(0,0,0,.65);
+  border:1px solid #0f3d2e;
+}
+
+/* BADGE */
+.badge{
+  display:inline-block;
+  background:#10b981;
+  color:#022c22;
+  padding:4px 12px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:600;
+  margin-bottom:14px;
+}
+
+/* TITLE */
+h1{
+  margin:0 0 6px;
+  font-size:22px;
+  color:#ecfdf5;
+}
+
+.subtitle{
+  font-size:13px;
+  color:#9ca3af;
+  margin-bottom:26px;
+}
+
+/* FORM */
+input{
+  width:100%;
+  padding:14px;
+  margin-bottom:15px;
+  border-radius:12px;
+  border:1px solid #14532d;
+  background:#022c22;
+  color:#ecfdf5;
+  font-size:14px;
+}
+
+input::placeholder{
+  color:#6ee7b7;
+}
+
+input:focus{
+  outline:none;
+  border-color:#10b981;
+  box-shadow:0 0 0 2px rgba(16,185,129,.35);
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#10b981,#34d399);
+  color:#022c22;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.25s;
+}
+
+button:hover{
+  filter:brightness(1.1);
+}
+
+button:active{
+  transform:scale(.96);
+}
+
+.logout{
+  background:linear-gradient(135deg,#f87171,#dc2626);
+  color:#fff;
+}
+
+/* FOOTER */
+.footer{
+  text-align:center;
+  margin-top:20px;
+  font-size:12px;
+  color:#6ee7b7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <span class="badge">LOGIN SYSTEM</span>
+  <h1>Masuk Akun</h1>
+  <div class="subtitle">Project Web Sederhana</div>
+
+  <div id="app"></div>
+
+  <div class="footer">
+    © Taufik Kurniawan
+  </div>
+</div>
+
+<script>
+class App{
+  constructor(id){
+    this.el=document.getElementById(id);
+
+    if(!localStorage.getItem("users")){
+      localStorage.setItem("users",JSON.stringify([
+        {username:"admin",password:"12345"},
+        {username:"user",password:"user123"}
+      ]));
+    }
+
+    this.loginForm();
+  }
+
+  loginForm(){
+    this.el.innerHTML=`
+      <input id="u" placeholder="Username">
+      <input id="p" type="password" placeholder="Password">
+      <button id="btn">Login</button>
+    `;
+    document.getElementById("btn").onclick=()=>this.login();
+  }
+
+  login(){
+    const u=document.getElementById("u").value.trim();
+    const p=document.getElementById("p").value.trim();
+    const users=JSON.parse(localStorage.getItem("users"));
+    const ok=users.find(x=>x.username===u && x.password===p);
+
+    if(!ok){
+      alert("Login gagal!");
+    }else{
+      this.success(ok.username);
+    }
+  }
+
+  success(name){
+    this.el.innerHTML=`
+      <p style="text-align:center;color:#ecfdf5;margin-bottom:22px">
+        Selamat datang,<br><b>${name}</b>
+      </p>
+      <button class="logout" id="out">Logout</button>
+    `;
+    document.getElementById("out").onclick=()=>this.loginForm();
+  }
+}
+
+new App("app");
+</script>
+
+</body>
+    </html>
